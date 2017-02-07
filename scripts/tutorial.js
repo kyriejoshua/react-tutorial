@@ -129,7 +129,6 @@ const Comment = React.createClass({
   }
 });
 
-
 // ReactDOM.render(
 //   <CommentBox />,
 //   document.getElementById('content')
@@ -187,11 +186,43 @@ const CommentList = React.createClass({
 
 
 // tutorial12.js 可变的状态 定义组件的初始状态
+// const CommentBox = React.createClass({
+//   getInitialState() {
+//     return {
+//       data: []
+//     }
+//   },
+//   render() {
+//     return (
+//       <div className="commentBox">
+//         <h1> Comments </h1>
+//         <CommentList data={this.state.data} />
+//         <CommentForm />
+//       </div>
+//     );
+//   }
+// });
+
+// tutorial13.js 更新状态，本地获取
 const CommentBox = React.createClass({
   getInitialState() {
     return {
       data: []
     }
+  },
+  componentDidMount() {
+    $.ajax({
+      url: this.props.url,
+      type: 'GET',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data})
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.log(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   render() {
     return (
@@ -200,15 +231,9 @@ const CommentBox = React.createClass({
         <CommentList data={this.state.data} />
         <CommentForm />
       </div>
-    );
+    )
   }
 });
-
-// tutorial11.js 从服务器获取数据 因没有相关接口，所以显示为无数据
-// ReactDOM.render(
-//   <CommentBox url="/api/comments" />,
-//   document.getElementById('content')
-// );
 
 // tutorial15.js
 const CommentForm = React.createClass({
@@ -225,7 +250,13 @@ const CommentForm = React.createClass({
   }
 });
 
+// ReactDOM.render(
+//   <CommentBox data={data} />,
+//   document.getElementById('content')
+// );
+
+// tutorial11.js 从本地服务器获取相应数据
 ReactDOM.render(
-  <CommentBox data={data} />,
+  <CommentBox url="/api/comments.json" />,
   document.getElementById('content')
 );

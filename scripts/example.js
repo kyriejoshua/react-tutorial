@@ -216,7 +216,7 @@ const CommentBox = React.createClass({
   },
   componentDidMount() {
     $.ajax({
-      url: '/api/comments/',
+      url: this.props.url,
       type: 'GET',
       dataType: 'json',
       cache: false,
@@ -229,11 +229,13 @@ const CommentBox = React.createClass({
     });
   },
   render() {
-    <div className="commentBox">
-      <h1> Comments </h1>
-      <CommentList data={this.state.data} />
-      <CommentForm />
-    </div>
+    return (
+      <div className="commentBox">
+        <h1> Comments </h1>
+        <CommentList data={this.state.data} />
+        <CommentForm />
+      </div>
+    )
   }
 });
 
@@ -294,14 +296,37 @@ const CommentForm = React.createClass({
 });
 
 // tutorial16.js 受控组件
-// const CommentForm = React.createClass({
-//   getInitialState() {
-//     return {
-//       author: '',
-//       text: ''
-//     };
-//   },
-//   handleAuthorChange(e) {
-//     this.setState{auther: e.target.value}
-//   }
-// });
+const CommentForm = React.createClass({
+  getInitialState() {
+    return {
+      author: '',
+      text: ''
+    };
+  },
+  handleAuthorChange(e) {
+    this.setState({auther: e.target.value});
+  },
+  handleTextChange(e) {
+    this.setState({text, e.target.value});
+  },
+  handleSubmit(e) {
+    e.preventDefault();
+    const author = this.state.author.trim();
+    const text = this.state.text.trim();
+    if (!text || !author) {
+      return;
+    }
+
+    // TODO: 向服务器发起请求
+    this.setState({author: '', text: ''});
+  },
+  render() {
+    return (
+      <form className="commentForm" onSublimt="{this.handleSubmit}">
+        <input type="text" placeholder="Your name" value={this.state.author} onChange={this.handleAuthorChange}/>
+        <input type="text" placeholder="Say something" value={this.state.text} onChange={this.handleTextChange}/>
+        <input type="submit" value="Post"/>
+      </form>
+    );
+  }
+});

@@ -1,7 +1,16 @@
 input {
+  padding-left: 20px;
   width: 200px;
   height: 36px;
   background: transparent;
   border: .5px solid #ededed;
+  border-radius: 4px;
   outline: none;
+}
+
+input[type='submit'] {
+  padding: 0;
+  background: #5eb288;
+  color: white;
+  border: none;
 }
