@@ -1,0 +1,7 @@
+input {
+  width: 200px;
+  height: 36px;
+  background: transparent;
+  border: .5px solid #ededed;
+  outline: none;
+}
