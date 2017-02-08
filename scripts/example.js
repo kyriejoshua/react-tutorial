@@ -221,10 +221,10 @@ const CommentBox = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data})
+        this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.log(this.props.url, status, err.toString());
+        console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
@@ -251,7 +251,7 @@ const CommentBox = React.createClass({
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.log(this.props.url, status, err.toString());
+        console.error(this.props.url, status, err.toString());
       }.bind(this)
     })
   },
@@ -262,16 +262,16 @@ const CommentBox = React.createClass({
   },
   componentDidMount() {
     this.loadDataFromServer();
-
-    // 这里不用写成setTimeout，因为每次状态改变自动会触发该方法，在状态改变后 2s 再调用
     setInterval(this.loadDataFromServer, this.props.pollInterval);
   },
   render() {
-    <div className="commentBox">
-      <h1> Comments </h1>
-      <CommentList data={this.state.data} />
-      <CommentForm />
-    </div>
+    return (
+      <div className="commentBox">
+        <h1> Comments </h1>
+        <CommentList data={this.state.data} />
+        <CommentForm />
+      </div>
+    );
   }
 });
 
@@ -295,7 +295,32 @@ const CommentForm = React.createClass({
   }
 });
 
-// tutorial16.js 受控组件
+// tutorial16.js 受控组件 文字输入时实时更新 state
+const CommentForm = React.createClass({
+  getInitialState() {
+    return {
+      author: '',
+      text: ''
+    };
+  },
+  handleAuthorChange(e) {
+    this.setState({auther: e.target.value});
+  },
+  handleTextChange(e) {
+    this.setState({text, e.target.value});
+  },
+  render() {
+    return (
+      <form className="commentForm">
+        <input type="text" placeholder="Your name" value={this.state.author} onChange={this.handleAuthorChange}/>
+        <input type="text" placeholder="Say something" value={this.state.text} onChange={this.handleTextChange}/>
+        <input type="submit" value="Post"/>
+      </form>
+    );
+  }
+});
+
+// tutorial17.js 提交表单，可提交表单内容，提交时发送请求到服务器，并刷新评论列表
 const CommentForm = React.createClass({
   getInitialState() {
     return {
@@ -310,6 +335,8 @@ const CommentForm = React.createClass({
     this.setState({text, e.target.value});
   },
   handleSubmit(e) {
+
+    // 阻止浏览器提交表单的默认行为
     e.preventDefault();
     const author = this.state.author.trim();
     const text = this.state.text.trim();
@@ -322,11 +349,137 @@ const CommentForm = React.createClass({
   },
   render() {
     return (
-      <form className="commentForm" onSublimt="{this.handleSubmit}">
+      <form className="commentForm" onSubmit={this.handleSubmit}>
         <input type="text" placeholder="Your name" value={this.state.author} onChange={this.handleAuthorChange}/>
         <input type="text" placeholder="Say something" value={this.state.text} onChange={this.handleTextChange}/>
         <input type="submit" value="Post"/>
       </form>
+    );
+  }
+});
+
+// tutorial18.js 将子组件的数据传递至父组件，在 CommentBox 完成所有逻辑
+// Notice: 这里 ajax 的请求没有在子组件 CommentForm 中完成，个人理解是在父组件中完成数据更新，再同步到两个子组件(CommentBox, CommentList)中
+const commentBox = React.createClass({
+  loadCommentsFromServer() {
+    $.ajax({
+      url: '/api/comments.json',
+      type: 'GET',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  handleCommentSubmit(comment) {
+    // TODO: 在这里提交评论并更新(刷新)列表
+  },
+  getInitialState() {
+    return {
+      data: []
+    }
+  },
+  componentDidMount() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  }
+  render() {
+    return (
+      <div className="commentBox">
+        <CommentList data={this.state.data} />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+      </div>
+    );
+  }
+});
+
+// tutorial19.js
+const CommentForm = React.createClass({
+  getInitialState() {
+    return {
+      author: '',
+      text: ''
+    }
+  },
+  handleAuthorChange(e) {
+    this.setState({author: e.target.value});
+  },
+  handleTextChange(e) {
+    this.setState({text: e.target.value});
+  },
+  handleSubmit(e) {
+    e.preventDefault();
+    const author = this.state.author.trim();
+    const text = this.state.text.trim();
+    if (!text || !author) {
+      return;
+    }
+
+    // 向服务器发送请求，由父组件传递过来
+    this.props.onCommentSubmit({author: author, text: text});
+    this.setState({author: '', text: ''});
+  },
+  render() {
+    return (
+      <form className="commentForm" onSubmit={this.handleSubmit}>
+        <input type="text" placeholder="Your name" value={this.state.author} onChange={this.handleAuthorChange}/>
+        <input type="text" placeholder="Say something..." value={this.state.text} onChange={this.handleTextChange}/>
+        <input type="submit" value="Post" />
+      </form>
+    );
+  }
+});
+
+// tutorial20.js 完成提交的 ajax
+const CommentBox = React.createClass({
+  loadCommentsFromServer() {
+    $.ajax({
+      url: this.props.url,
+      type: 'GET',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  handleCommentSubmit(comment) {
+    $.ajax({
+      url: this.props.url,
+      type: 'POST',
+      dataType: 'json',
+      cache: false,
+      data: comment,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, statur, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState() {
+    return {
+      data: []
+    };
+  },
+  componentDidMount() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render() {
+    return(
+      <div className="commentBox">
+        <CommentList data={this.state.data} />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+      </div>
     );
   }
 });

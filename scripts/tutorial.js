@@ -184,6 +184,11 @@ const CommentList = React.createClass({
 //   document.getElementById('content')
 // );
 
+// tutorial11.js 从本地服务器获取相应数据
+// ReactDOM.render(
+//   <CommentBox url="/api/comments.json" />,
+//   document.getElementById('content')
+// );
 
 // tutorial12.js 可变的状态 定义组件的初始状态
 // const CommentBox = React.createClass({
@@ -204,59 +209,176 @@ const CommentList = React.createClass({
 // });
 
 // tutorial13.js 更新状态，本地获取
-const CommentBox = React.createClass({
-  getInitialState() {
-    return {
-      data: []
-    }
-  },
-  componentDidMount() {
-    $.ajax({
-      url: this.props.url,
-      type: 'GET',
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-        this.setState({data: data})
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.log(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
-  render() {
-    return (
-      <div className="commentBox">
-        <h1> Comments </h1>
-        <CommentList data={this.state.data} />
-        <CommentForm />
-      </div>
-    )
-  }
-});
+// const CommentBox = React.createClass({
+//   getInitialState() {
+//     return {
+//       data: []
+//     }
+//   },
+//   componentDidMount() {
+//     $.ajax({
+//       url: this.props.url,
+//       type: 'GET',
+//       dataType: 'json',
+//       cache: false,
+//       success: function(data) {
+//         this.setState({data: data})
+//       }.bind(this),
+//       error: function(xhr, status, err) {
+//         console.log(this.props.url, status, err.toString());
+//       }.bind(this)
+//     });
+//   },
+//   render() {
+//     return (
+//       <div className="commentBox">
+//         <h1> Comments </h1>
+//         <CommentList data={this.state.data} />
+//         <CommentForm />
+//       </div>
+//     );
+//   }
+// });
+
+// tutorial14.js 轮询获取数据 实时刷新
+// const CommentBox = React.createClass({
+//   loadDataFromServer() {
+//     $.ajax({
+//       url: this.props.url,
+//       type: 'GET',
+//       dataType: 'json',
+//       cache: false,
+//       success: function(data) {
+//         this.setState({data: data});
+//       }.bind(this),
+//       error: function(xhr, status, err) {
+//         console.log(this.props.url, status, err.toString());
+//       }.bind(this)
+//     })
+//   },
+//   getInitialState() {
+//     return {
+//       data: []
+//     }
+//   },
+//   componentDidMount() {
+//     this.loadDataFromServer();
+//     setInterval(this.loadDataFromServer, this.props.pollInterval);
+//   },
+//   render() {
+//     return (
+//       <div className="commentBox">
+//         <h1> Comments </h1>
+//         <CommentList data={this.state.data} />
+//         <CommentForm />
+//       </div>
+//     )
+//   }
+// });
 
 // tutorial15.js
+// const CommentForm = React.createClass({
+//   render() {
+//     return (
+//       <form className="commentForm">
+//         <input type="text" placeholder="Your name" />
+//         <br/><br/>
+//         <input type="text" placeholder="Say something..." />
+//         <br/><br/>
+//         <input type="submit" value="Post" />
+//       </form>
+//     );
+//   }
+// });
+
+// tutorial19.js
 const CommentForm = React.createClass({
+  getInitialState() {
+    return {
+      author: '',
+      text: ''
+    }
+  },
+  handleAuthorChange(e) {
+    this.setState({author: e.target.value});
+  },
+  handleTextChange(e) {
+    this.setState({text: e.target.value});
+  },
+  handleSubmit(e) {
+    e.preventDefault();
+    const author = this.state.author.trim();
+    const text = this.state.text.trim();
+    if (!text || !author) {
+      return;
+    }
+
+    // 向服务器发送请求，由父组件传递过来
+    this.props.onCommentSubmit({author: author, text: text});
+    this.setState({author: '', text: ''});
+  },
   render() {
     return (
-      <form className="commentForm">
-        <input type="text" placeholder="Your name" />
-        <br/><br/>
-        <input type="text" placeholder="Say something..." />
-        <br/><br/>
+      <form className="commentForm" onSubmit={this.handleSubmit}>
+        <input type="text" placeholder="Your name" value={this.state.author} onChange={this.handleAuthorChange}/>
+        <input type="text" placeholder="Say something..." value={this.state.text} onChange={this.handleTextChange}/>
         <input type="submit" value="Post" />
       </form>
     );
   }
 });
 
-// ReactDOM.render(
-//   <CommentBox data={data} />,
-//   document.getElementById('content')
-// );
+// tutorial20.js 完成提交的 ajax
+const CommentBox = React.createClass({
+  loadCommentsFromServer() {
+    $.ajax({
+      url: this.props.url,
+      type: 'GET',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  handleCommentSubmit(comment) {
+    $.ajax({
+      url: this.props.url,
+      type: 'POST',
+      dataType: 'json',
+      cache: false,
+      data: comment,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, statur, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState() {
+    return {
+      data: []
+    };
+  },
+  componentDidMount() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render() {
+    return(
+      <div className="commentBox">
+        <CommentList data={this.state.data} />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+      </div>
+    );
+  }
+});
 
-// tutorial11.js 从本地服务器获取相应数据
 ReactDOM.render(
-  <CommentBox url="/api/comments.json" />,
+  <CommentBox url="/api/comments.json" pollInterval={2000} />,
   document.getElementById('content')
 );
