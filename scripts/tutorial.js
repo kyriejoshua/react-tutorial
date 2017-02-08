@@ -329,22 +329,77 @@ const CommentForm = React.createClass({
 });
 
 // tutorial20.js 完成提交的 ajax
+// const CommentBox = React.createClass({
+//   loadCommentsFromServer() {
+//     $.ajax({
+//       url: this.props.url,
+//       type: 'GET',
+//       dataType: 'json',
+//       cache: false,
+//       success: function(data) {
+//         this.setState({data: data});
+//       }.bind(this),
+//       error: function(xhr, status, err) {
+//         console.error(this.props.url, status, err.toString());
+//       }.bind(this)
+//     });
+//   },
+//   handleCommentSubmit(comment) {
+//     $.ajax({
+//       url: this.props.url,
+//       type: 'POST',
+//       dataType: 'json',
+//       cache: false,
+//       data: comment,
+//       success: function(data) {
+//         this.setState({data: data});
+//       }.bind(this),
+//       error: function(xhr, statur, err) {
+//         console.error(this.props.url, status, err.toString());
+//       }.bind(this)
+//     });
+//   },
+//   getInitialState() {
+//     return {
+//       data: []
+//     };
+//   },
+//   componentDidMount() {
+//     this.loadCommentsFromServer();
+//     setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+//   },
+//   render() {
+//     return (
+//       <div className="commentBox">
+//         <CommentList data={this.state.data} />
+//         <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+//       </div>
+//     );
+//   }
+// });
+
+// tutorial21.js 优化逻辑 实现评论增加的实时刷新，使用浏览器 api fetch 来替代 ajax
 const CommentBox = React.createClass({
   loadCommentsFromServer() {
-    $.ajax({
-      url: this.props.url,
-      type: 'GET',
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
+
+    // 注意，这里须使用 ES6 的箭头函数写法，否则要保存当前的 this
+    window.fetch(this.props.url).then((response) => {
+      return response.json()
+      .then((json) => {
         this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
+      }.bind(this))
+      .catch((e) => {
+        console.error('Oops, error.');
+      }.bind(this));
     });
   },
   handleCommentSubmit(comment) {
+    let comments = this.state.data;
+
+    // 使用时间戳作为唯一的标识 key。实际中，生产环境里这个 id 通常由服务端生成
+    comment.id = Date.now();
+    let newComments = comments.concat([comment]);
+    this.setState({data: newComments});
     $.ajax({
       url: this.props.url,
       type: 'POST',
@@ -355,6 +410,10 @@ const CommentBox = React.createClass({
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, statur, err) {
+
+        // 临时写成实时可见效果，但随着轮询的请求会被刷新替代
+        this.setState({data: newComments});
+        // this.setState({data: comments});
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
@@ -369,7 +428,7 @@ const CommentBox = React.createClass({
     setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render() {
-    return(
+    return (
       <div className="commentBox">
         <CommentList data={this.state.data} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} />

@@ -475,7 +475,61 @@ const CommentBox = React.createClass({
     setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render() {
-    return(
+    return (
+      <div className="commentBox">
+        <CommentList data={this.state.data} />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+      </div>
+    );
+  }
+});
+
+// tutorial21.js 优化逻辑 实现评论增加的实时刷新，使用浏览器 api fetch 来替代 ajax
+const CommentBox = React.createClass({
+  loadCommentsFromServer() {
+    window.fetch(this.props.url).then((response) => {
+      return response.json()
+      .then((json) => {
+        this.setState(json);
+      }.bind(this))
+      .catch((e) => {
+        console.error('Oops, error.');
+      }.bind(this));
+    });
+  },
+  handleCommentSubmit(comment) {
+    let comments = this.state.data;
+
+    // 使用时间戳作为唯一的标识 key。实际中，生产环境里这个 id 通常由服务端生成
+    comment.id = Date.now();
+    let newComments = comments.concat([comment]);
+    this.setState({data: newComments});
+    $.ajax({
+      url: this.props.url,
+      type: 'POST',
+      dataType: 'json',
+      cache: false,
+      data: comment,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, statur, err) {
+        this.setState({data: comments});
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState() {
+    return {
+      data: []
+    };
+  },
+  componentDidMount() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render() {
+    return (
       <div className="commentBox">
         <CommentList data={this.state.data} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} />
