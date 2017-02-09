@@ -390,6 +390,7 @@ const commentBox = React.createClass({
   render() {
     return (
       <div className="commentBox">
+        <h1> Comments </h1>
         <CommentList data={this.state.data} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
@@ -477,6 +478,7 @@ const CommentBox = React.createClass({
   render() {
     return (
       <div className="commentBox">
+        <h1> Comments </h1>
         <CommentList data={this.state.data} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
@@ -531,6 +533,7 @@ const CommentBox = React.createClass({
   render() {
     return (
       <div className="commentBox">
+        <h1> Comments </h1>
         <CommentList data={this.state.data} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
