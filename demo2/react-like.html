@@ -5,7 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>React-like</title>
   <style media="screen">
+    html,
+    body,
+    .wrapper {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .wrapper {
+      display: flex;
+      background: rgba(123, 123, 123, .04);
+    }
+    .container {
+      margin: auto;
+    }
     .like-btn {
+      margin: auto;
       width: 180px;
       height: 40px;
       outline: none;
@@ -13,6 +29,7 @@
       border: 1px solid #4082E6;;
       border-radius: 2px;
       background-color: white;
+      cursor: pointer;
     }
     .like-btn:hover {
       background-color: #F1F7FC;

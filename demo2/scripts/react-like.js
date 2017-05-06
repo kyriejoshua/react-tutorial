@@ -31,6 +31,7 @@ wrapper.innerHTML = likeButton.render();
 // 绑定事件，但只有打印，没有交互
 const createDOMFromString = (domString) => {
   const div = document.createElement('div');
+  div.className = 'container';
   div.innerHTML = domString;
   return div;
 }
