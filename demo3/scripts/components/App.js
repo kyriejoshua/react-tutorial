@@ -8,7 +8,10 @@ import VisibleTodoList from './../containers/VisibleTodoList'
  * @return {JSX Object} [description]
  */
 const App = () => (
-  <div>
+  <div style={{
+        boxShadow: '0 2px 4px #bdbdbd',
+        padding: '20px'
+  }}>
     <AddTodo/>
     <Footer/>
     <VisibleTodoList/>

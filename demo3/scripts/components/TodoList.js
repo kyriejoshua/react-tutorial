@@ -7,7 +7,11 @@ const T = PropTypes
  * @return {JSX Object} [description]
  */
 const TodoList = ({todos, onTodoClick}) => (
-  <ul>
+  <ul style={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '2px',
+        listStyle: 'lower-latin'
+  }}>
     {todos.map((todo, index) =>
       <Todo key={index} {...todo} onClick={() => onTodoClick(index)} />
     )}

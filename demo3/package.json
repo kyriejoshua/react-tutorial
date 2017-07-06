@@ -4,8 +4,7 @@
   "description": "demo for redux",
   "main": "index.js",
   "scripts": {
-    "test": "test",
-   "start": "webpack-dev-server --watch-poll --open-page dist/index.html"
+    "start": "webpack-dev-server --watch-poll --open-page dist/index.html"
   },
   "keywords": [
     "react",

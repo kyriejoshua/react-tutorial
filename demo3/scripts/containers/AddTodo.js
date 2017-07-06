@@ -11,13 +11,14 @@ let AddTodo = ({dispatch}) => {
 
   return (
     <div>
-      <form onSubmit={e => {
-        e.preventDefault()
-        if (!input.value.trim()) {
-          return
-        }
-        dispatch(addTodo(input.value))
-        input.value = ''
+      <form style={{display: 'flex'}}
+            onSubmit={e => {
+              e.preventDefault()
+              if (!input.value.trim()) {
+                return
+              }
+              dispatch(addTodo(input.value))
+              input.value = ''
       }}>
         <input ref={node => {
           input = node

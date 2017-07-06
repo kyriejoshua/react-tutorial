@@ -1,5 +1,6 @@
 /* 复制了 antd 的样式 */
 input {
+  flex: 1;
   height: 26px;
   line-height: 26px;
   padding: 0 7px;

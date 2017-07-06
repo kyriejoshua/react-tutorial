@@ -9,7 +9,9 @@ const Todo = ({onClick, completed, text}) => (
   <li onClick={onClick}
       style={{
         textDecoration: completed ? 'line-through': 'none',
-        cursor: completed ? 'default': 'pointer'
+        cursor: completed ? 'default': 'pointer',
+        height: '36px',
+        lineHeight: '36px'
   }}>
     {text}
   </li>

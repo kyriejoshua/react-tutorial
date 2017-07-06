@@ -4,6 +4,7 @@
 
 * node v6.8.1 or v6.6.0
 * webpack v3.0.0
+* react 因版本过新，PropTypes 理应另外引入，这里不再修改了。
 
 ### Usage
 

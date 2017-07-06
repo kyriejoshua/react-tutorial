@@ -18,6 +18,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         use: [{
             loader: 'babel-loader',
+            // 该选项必须添加
             query: {
               presets: ['es2015', 'stage-0', 'react']
             }
