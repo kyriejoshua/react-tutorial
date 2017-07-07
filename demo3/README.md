@@ -14,6 +14,10 @@
 
 * 该项目最初是以 script 标签的方式来引入所有依赖的库的，但由于浏览器不支持 import/export 等语法，所以使用了 webpack。 
 
+### Screenshot
+
+![Todolist](https://github.com/kyriejoshua/react-tutorial/blob/master/demo3/imgs/redux-demo.png)
+
 ### [More](http://cn.redux.js.org//docs/basics/UsageWithReact.html)
 
 * redux 的官方案例 -- todolist。
