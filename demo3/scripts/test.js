@@ -8,12 +8,12 @@ class Modal extends React.Component {
       content: '😆'
     }
   }
-  
+
   handleClick() {
     let content = this.state.content === '😆' ? '🤣' : '😆';
     this.setState({
       content: content
-    }); 
+    });
   }
 
   render() {
@@ -27,7 +27,6 @@ class Modal extends React.Component {
     )
   }
 }
-
 
 ReactDOM.render(
   <Modal/>,

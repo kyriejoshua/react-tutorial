@@ -21,3 +21,4 @@
 ### [More](http://cn.redux.js.org//docs/basics/UsageWithReact.html)
 
 * redux 的官方案例 -- todolist。
+* 全部为无状态的函数式组件。
