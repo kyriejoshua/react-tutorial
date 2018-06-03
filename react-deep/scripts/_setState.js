@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { WiredButton, WiredCard } from 'wired-elements'
 
 class ExampleA extends Component {
   constructor() {
@@ -55,20 +56,20 @@ class ExampleA extends Component {
   // this.enqueueCallback()
 
   addCount() {
-    this.setState({ count: this.state.clicked + 1})
-    this.setState({ count: this.state.clicked + 1})
-    console.info(this.state.count) // 3 相当于合并了2次为1次
+    this.setState({ clicked: this.state.clicked + 1})
+    this.setState({ clicked: this.state.clicked + 1})
+    console.info(this.state.clicked) // 3 相当于合并了2次为1次
   }
 
   render() {
     return(
-      <div>
+      <wired-card>
         <h3>setState Example</h3>
         <h4>count: {this.state.count}</h4>
         <h4>clicked: {this.state.clicked}</h4>
-        <button onClick={this.addCount.bind(this)}> state + 1
-        </button>
-      </div>
+        <wired-button onClick={this.addCount.bind(this)}> state + 1
+        </wired-button>
+      </wired-card>
     )
   }
 }
