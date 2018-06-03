@@ -8,7 +8,8 @@
 
 ### Table of Contents
 
-* **demo1:** 入门学习案例。
-* **demo2:** 学习笔记——仿 React 原理写的简陋版 React, 纯原生 ES6 实现。
-* **demo3:** 学习 redux, 官方案例——TodoList.
+* **react-basic:** 入门学习案例。
+* **react-like:** 学习笔记——仿 React 原理写的简陋版 React, 纯原生 ES6 实现。
+* **react-deep:** React 的一些底层原理解析。
+* **react-redux:** 学习 redux, 官方案例——TodoList.
 

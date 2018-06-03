@@ -1,6 +1,6 @@
 .tern-project
-demo3/.vscode
-demo3/node_modules
-demo3/dist/bundle.js
+*/.vscode
+*/node_modules
+*/dist/bundle.js
 */npm-debug.log
 npm-debug.log
