@@ -8,6 +8,21 @@ class ExampleA extends Component {
       count: 0,
       clicked: 0
     }
+    this.addCount = this.addCount.bind(this)
+  }
+
+  componentWillMount() {
+    // this.setState({ count: 1 }) // 没毛病但通常不建议这样做
+  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  // }
+  componentWillUpdate(nextProps, nextState) {
+    console.info('will update', nextProps, nextState)
+    // this.setState({ count: 1 }) // 会不断进入该生命周期导致死循环
+  }
+  componentDidUpdate(prevProps, prevState) {
+    console.info('did update', prevProps, prevState)
   }
 
   componentDidMount() {
@@ -62,12 +77,13 @@ class ExampleA extends Component {
   }
 
   render() {
+    // this.setState({ count: 1 }) // 会不断进入该生命周期导致死循环
     return(
       <wired-card>
         <h3>setState Example</h3>
         <h4>count: {this.state.count}</h4>
         <h4>clicked: {this.state.clicked}</h4>
-        <wired-button onClick={this.addCount.bind(this)}> state + 1
+        <wired-button onClick={this.addCount}> state + 1
         </wired-button>
       </wired-card>
     )
