@@ -26,6 +26,8 @@ class ExampleA extends Component {
   }
 
   componentDidMount() {
+    // 在这里的 setState 调用栈可以查看到是在 _renderNewRootComponent 方法中执行 batchedMountComponentIntoNode 事务(transaction)
+    // 调用栈详情见图 ../assets/setState/_renderNewRootComponent.png
     this.setState({ count: this.state.count + 1 })
     console.info(this.state.count) // 0
     this.setState({ count: this.state.count + 1 })
@@ -46,7 +48,8 @@ class ExampleA extends Component {
   //     this.isBatchingUpdates = true
   //     transActions.perform(callback, null, a, b, c, d, e)
   //     // 查看调用栈发现有 mountComponentIntoNode 事务进行中，结合 isBatchingUpdates 标志位判断，所以 setstate 后并不会马上更新
-  //     // 往外回溯可发现 mountComponentIntoNode 的外部调用栈 _renderNewRootComponent, 这里推断应当是 componentDidMount 时在进行的，在其他生命周期里调用则会是其他的
+  //     // 往外回溯可发现 mountComponentIntoNode 的外部调用栈 _renderNewRootComponent, 这里推断应当是 componentDidMount 时在进行的
+  //     // 如果是在其他生命周期里或者是函数调用则会是其他的，例如下文点击里的 dispatchEvent
   //   }
   // }
   // 部分源码
@@ -67,10 +70,12 @@ class ExampleA extends Component {
   // var queue = internalInstance._pendingStateQueue || (internalInstance._pendingStateQueue = [])
   // queue.push(partialState)
   // new state 存入 pending 队列 => pendingStateQueue
-  // this.enqueueUpdate(internalInstance)
+  // this.enqueueUpdate(internalInstance) 即 ReactUpdates.enqueueUpdate(Component)，然后 dirtyComponent.push(Component)
   // this.enqueueCallback()
 
   addCount() {
+    // 在这里的 setState 调用栈可以查看到是在 dispatchEvent 方法中执行 topClick 事务(transaction)
+    // 调用栈详情见图 ../assets/setState/dispatchEvent.png
     this.setState({ clicked: this.state.clicked + 1})
     this.setState({ clicked: this.state.clicked + 1})
     console.info(this.state.clicked) // 3 相当于合并了2次为1次

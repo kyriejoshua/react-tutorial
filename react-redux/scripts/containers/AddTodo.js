@@ -31,7 +31,6 @@ let AddTodo = ({dispatch}) => {
   );
 }
 
-// AddTodo = ReactRedux.connect()(AddTodo)
 AddTodo = connect()(AddTodo)
 
 export default AddTodo
