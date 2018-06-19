@@ -19,14 +19,14 @@ store = {
  */
 
 /**
- * Provider 让所有子组件可以访问 store
+ * Provider 让所有子组件可以访问 store 的原理实际上就是将 store 保存在 context 中, 然后子组件通过 connect 方法获取到 context
  * 自己理解的逻辑整理如下：
  * Provider 由一个自执行函数(匿名函数)生成，该函数返回了一个新的函数，并且保存了外部的变量 storeKey 即后来的在默认情况下的 "store"
  * 通过上述匿名函数，此时生成的 Provider 则是继承了 ReactComponent
  * 然后在 Provider 方法中，调用 _Component 即 ReactComponent 构造函数
  * 在原 ReactComponent 实例上加上 props、context、refs、updater、等初始化属性的
  * 源代码注释解释，这部分属性是为了更好地更新组件内部状态 state
- * 再然后显式的保存 store 属性
+ * 再然后显式的保存 store 属性在 Provider 中，然后通过 getChildContext 方法来获取
  * 下面是一个简化版的 createProvider
   function createProvider() {
 
@@ -35,7 +35,11 @@ store = {
     var Provider = function (_Component) {
       _inherits(Provider, _Component);
 
+      // 通过 context 保存 store，返回的就是 context: { store: {...} }
       Provider.prototype.getChildContext = function getChildContext() {
+        var _ref;
+
+        return _ref = {}, _ref[storeKey] = this[storeKey], _ref[subscriptionKey] = null, _ref;
       };
 
       function Provider(props, context) {
