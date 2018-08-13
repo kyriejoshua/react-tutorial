@@ -1,6 +1,8 @@
+.DS_Store
 .tern-project
 */.vscode
 */node_modules
+*/package-lock.json
 */dist/bundle.js
 */npm-debug.log
 npm-debug.log

@@ -1,7 +1,8 @@
-var path = require('path');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './scripts/index.js',
+  entry: './index.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
@@ -23,7 +24,16 @@ module.exports = {
             presets: ['es2015', 'stage-0', 'react']
           }
         }]
+      }, {
+        test: /\.html$/,
+        loader: 'html-loader'
       }
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'index.html'
+    })
+  ]
 }
