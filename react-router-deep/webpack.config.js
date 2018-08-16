@@ -32,9 +32,16 @@ module.exports = {
       }
     ]
   },
+
+  // /home 页面无法访问的原因其实是 webpack-dev-server 如何定位文件的原理
+  // webpack-dev-sever 如何定位文件呢
+  // webpack-dev-sever 是静态资源服务器，他会通过你的 output 配置去读取文件，通过’/’分割以文件查找的模式匹配文件。
+  // 这样自然就产生问题了，因为你配置的路由并不是实际存在的文件，根据文件查找的方式是找不到的，只会 404。
   // https://webpack.docschina.org/configuration/dev-server/#devserver-historyapifallback
-  // /home 页面无法访问的解决办法，这是在 webpack-dev-server 层面需要支持的
-  // 当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html。通过传入以下启用：
+  // /home 页面无法访问的解决办法
+  // 当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html。通过传入以下启用：`historyApiFallback: true`
+  // 加入后，可以看到 webpack-dev-server 启动后的 log 中有一行 `404s will fallback to /index.html`
+  // 意味着原本会进入 /home 目录下查找，但在设置后路径会执行 index.html
   devServer: {
     historyApiFallback: true,
   },
