@@ -1,5 +1,6 @@
 import React from 'react'
 import { Router, Route } from 'react-router'
+import { WiredCard } from 'wired-elements'
 import Home from './../app/home'
 
 const prefix = process.env.prefix
@@ -7,7 +8,7 @@ const prefix = process.env.prefix
 const AppRouter = ({ history }) => (
   <Router history={history}>
     <div id="content">
-      <Route exact path='/' render={() => (<h1>Index</h1>)} />
+      <Route exact path='/' render={() => (<wired-card>Index</wired-card>)} />
       <Route path='/home' component={Home} />
       {/* <Route path={`${prefix}/home`} component={Home} /> */}
     </div>
