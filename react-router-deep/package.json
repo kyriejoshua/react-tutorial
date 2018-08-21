@@ -1,6 +1,6 @@
 {
   "name": "react-router-deep",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -15,11 +15,15 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^1.0.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "moment": "^2.22.2",
     "react": "^16.4.2",
+    "react-big-calendar": "^0.19.2",
     "react-dom": "^16.4.2",
     "react-router": "^4.3.1",
+    "style-loader": "^0.22.1",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0",
     "wired-elements": "^0.5.8"

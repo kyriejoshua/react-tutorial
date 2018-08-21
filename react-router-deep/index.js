@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { render } from 'react-dom'
 import AppRouter from './routes/'
 import { createBrowserHistory } from 'history'
-
+import './index.css'
 const history = createBrowserHistory()
 
 // 对 react-router 的分析，目前准备主要集中在三点

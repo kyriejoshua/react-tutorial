@@ -1,0 +1,50 @@
+.calendar {
+  width: 100%;
+  height: 100%;
+}
+
+.calendar-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 200px;
+  height: 100px;
+  background: #eee;
+}
+
+.card {
+  position: absolute;
+  background: rgba(22, 22, 22, 0.7);
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+}
+
+.card-show {
+  display: block;
+}
+
+.card-hidden {
+  display: none;
+}
+
+.clear-btn {
+  position: fixed;
+  padding: 5px 15px;
+  fontSize: 16px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 11;
+}
+
+.push-btn {
+  position: fixed;
+  padding: 5px 15px;
+  fontSize: 16px;
+  bottom: 20px;
+  right: 20px;
+  z-index: 11;
+}
