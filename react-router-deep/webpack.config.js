@@ -32,6 +32,9 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    extensions: ['.js', 'jsx', '.css', '.json']
+  },
 
   // /home 页面无法访问的原因其实是 webpack-dev-server 如何定位文件的原理
   // webpack-dev-sever 如何定位文件呢

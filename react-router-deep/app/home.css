@@ -10,14 +10,17 @@
   right: 0;
   bottom: 0;
   margin: auto;
-  width: 200px;
-  height: 100px;
-  background: #eee;
+  padding: 10px;
+  width: 400px;
+  height: 240px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .card {
   position: absolute;
-  background: rgba(22, 22, 22, 0.7);
+  background: rgba(22, 22, 22, 0.2);
   width: 100%;
   height: 100%;
   z-index: 999;
@@ -29,6 +32,17 @@
 
 .card-hidden {
   display: none;
+}
+
+.card-textarea {
+  width:  100%;
+  height: 100%;
+  border:  none;
+  border-radius: 6px;
+  font-size: 16px;
+}
+.card-textarea:focus {
+  outline: none;
 }
 
 .clear-btn {
