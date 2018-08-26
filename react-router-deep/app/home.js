@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { WiredButton } from 'wired-elements'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
-import { isUnique } from './util'
+import { isUnique, getFormattedDate } from './util'
 import data from './data'
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import './home.css'
@@ -31,8 +31,8 @@ export default class Home extends PureComponent  {
       id: len,
       title,
       allDay: false,
-      start: new Date(),
-      end: new Date()
+      start: getFormattedDate(),
+      end: getFormattedDate()
     }
     if (!isUnique(newEvents, events)) { return }
     this.setState({

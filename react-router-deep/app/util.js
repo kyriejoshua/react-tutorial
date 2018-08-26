@@ -12,4 +12,12 @@ export function isUnique(a, b) {
   })
 }
 
+/**
+ * [getFormattedDate 格式化日期]
+ * @param  {Date} date [description]
+ * @return {String}      [description]
+ */
+export function getFormattedDate(date = undefined) {
+  return moment(date).format('YYYY-MM-DD HH:mm')
+}
 // TODO 计算连续打卡时长
