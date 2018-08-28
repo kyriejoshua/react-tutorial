@@ -34,8 +34,9 @@ const history = createBrowserHistory()
 //   listen
 // }
 // `createHref` 根据根路径创建新路径，在根路径上添加原地址所带的 `search`, `pathname`, `path` 参数, 推测作用是将路径简化
-// 其中，`go`,`goBack`,`goForward` 是对原生 history.go 的简单封装
-// `push`, `replace` 则是原生方法的扩展，但相对逻辑较多，同样是跳转逻辑，而且两者有较多逻辑相同
+// 其中，`go`,`goBack`,`goForward` 是对原生 `history.go` 的简单封装
+
+// `push`, `replace` 方法则是原生方法的扩展，但相对逻辑较多，同样是跳转逻辑，而且两者有较多逻辑相同
 // 这里以 push 为例, 其实就是对原生的 history.pushState 做了判断和优化，具体的过渡实现则使用了 transitionManager
 // const push = (path, state) => {
 //   const action = "PUSH";
@@ -58,6 +59,50 @@ const history = createBrowserHistory()
 //     }
 //   );
 // };
+
+// 当做出浏览器动作时，会触发 `popstate` 事件, 也就是说，`popstate` 本身并不是像 `pushState` 或 `replaceState` 一样是 history 的方法
+// 不能使用 `history.popState` 这样的方式来调用
+// 而且，直接调用 `history.pushState` 或 `history.replaceState` 不会触发 popstate 事件
+// 在事件监听方法 `listen` 中涉及了 `popstate` 的使用，在源码中可以看到以下两个方法
+// const PopStateEvent = "popstate";
+// const HashChangeEvent = "hashchange";
+// const listen = listener => {
+//   const unlisten = transitionManager.appendListener(listener);
+//   checkDOMListeners(1);
+//   return () => {
+//     checkDOMListeners(-1);
+//     unlisten();
+//   };
+// };
+// const checkDOMListeners = delta => {
+//   listenerCount += delta;
+//   if (listenerCount === 1) {
+//     window.addEventListener(PopStateEvent, handlePopState);
+//     if (needsHashChangeListener)
+//       window.addEventListener(HashChangeEvent, handleHashChange);
+//   } else if (listenerCount === 0) {
+//     window.removeEventListener(PopStateEvent, handlePopState);
+//     if (needsHashChangeListener)
+//       window.removeEventListener(HashChangeEvent, handleHashChange);
+//   }
+// };
+// 因此，调用 `listen` 就是给 window 绑定了相应方法，再次调用则是取消
+
+// 以上几段代码中 `transitionManager` 对象出现了多次，在 popstate 相关方法中，它提供了 `appendListener` 方法
+// 内部其实是和 `listen` 方法相似的绑定和解绑逻辑，调用是绑定箭头事件，返回一个解绑函数，再次调用的话就是解绑事件
+// const appendListener = fn => {
+//   let isActive = true;
+//   const listener = (...args) => {
+//     if (isActive) fn(...args);
+//   };
+//   listeners.push(listener);
+//   return () => {
+//     isActive = false;
+//     listeners = listeners.filter(item => item !== listener);
+//   };
+// };
+
+// TODO: `confirmTransitionTo`
 // 在使用方法之前，它首先用几个工具函数做了判断，判断该浏览器是否适用
 
 const App = () => (

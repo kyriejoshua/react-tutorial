@@ -121,11 +121,23 @@ const data = [{
   start: getFormattedDate(new Date(2018, 7, 21)),
   end: getFormattedDate(new Date(2018, 7, 21)),
 }, {
-  id:20,
+  id: 20,
   title: 'Sports: 360 80',
   allDay: false,
   start: getFormattedDate(new Date(2018, 7, 25)),
   end: getFormattedDate(new Date(2018, 7, 25))
+}, {
+  id: 21,
+  title: 'Sports: 340',
+  allDay: false,
+  start: getFormattedDate(new Date(2018, 7, 26)),
+  end: getFormattedDate(new Date(2018, 7, 26))
+}, {
+  id: 22,
+  title: 'Sports: 330',
+  allDay: false,
+  start: getFormattedDate(new Date(2018, 7, 28)),
+  end: getFormattedDate(new Date(2018, 7, 28))
 }]
 
 export default data
