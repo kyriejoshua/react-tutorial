@@ -138,6 +138,12 @@ const data = [{
   allDay: false,
   start: getFormattedDate(new Date(2018, 7, 28)),
   end: getFormattedDate(new Date(2018, 7, 28))
+}, {
+  id: 23,
+  title: "Sports: 400 80 2min",
+  allDay: false,
+  start: "2018-08-29 21:48",
+  end: "2018-08-29 21:48"
 }]
 
 export default data
