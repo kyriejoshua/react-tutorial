@@ -96,17 +96,33 @@ const history = createBrowserHistory()
 
 // 以上几段代码中 `transitionManager` 对象出现了多次，在 `popstate` 相关方法中，它提供了 `appendListener` 方法
 // 内部其实是和 `listen` 方法相似的绑定和解绑逻辑，调用是绑定箭头事件，返回一个解绑函数，该解绑函数再次调用的话就是解绑事件
+// 其实这就是常见的订阅-发布模式，以下两个函数中，前者负责订阅事件，后者负责最终发布
+// let listens = [];
+/**
+ * [description 订阅事件]
+ * @param  {Function} fn [description]
+ * @return {Function}      [description]
+ */
 // const appendListener = fn => {
 //   let isActive = true;
+//   // 订阅事件，并做了函数柯里化处理，它实际上相当于运行了 `fn.apply(this, ...args)`
 //   const listener = (...args) => {
 //     if (isActive) fn(...args);
 //   };
+//   将监听函数一个个保存
 //   listeners.push(listener);
 //   return () => {
 //     isActive = false;
 //     listeners = listeners.filter(item => item !== listener);
 //   };
 // };
+/**
+ * [最终调用(发布)]
+ * @param  {[type]} ..args [description]
+ */
+// const notifyListeners = (..args) => {
+//   listeners.forEach(listener = listener(...args))
+// }
 
 // 另一个用的较多的方法 `confirmTransitionTo`
 // const confirmTransitionTo = (
