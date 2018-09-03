@@ -5,6 +5,8 @@ import { createBrowserHistory } from 'history'
 import './index.css'
 const history = createBrowserHistory()
 
+// 对应博客地址: [理解 react-router 中的 history](http://kyriejoshua.github.io/jo.github.io/2018/07/29/understanding-history-with-react-router/)
+
 // 对 `react-router` 的分析，目前准备主要集中在三点
 // 1. `history` 的分析
 // 2. `react-router` 原理分析
