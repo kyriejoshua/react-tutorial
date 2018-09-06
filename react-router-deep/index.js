@@ -40,7 +40,15 @@ const history = createBrowserHistory()
 //   block,
 //   listen
 // }
+// `globalHistory.length` 显而易见是当前存的历史栈的数量。
 // `createHref` 根据根路径创建新路径，在根路径上添加原地址所带的 `search`, `pathname`, `path` 参数, 推测作用是将路径简化
+// `location` 当前的 `location`, 可能含有以下几个属性。
+  // `path` - (string) 当前 `url` 的路径 `path`.
+  // `search` - (string) 当前 `url` 的查询参数 `query string`.
+  // `hash` - (string) 当前 `url` 的哈希值 `hash`.
+  // `state` - - (object) 存储栈的内容。仅存在浏览器历史和内存历史中。
+// `block` 阻止浏览器的默认导航。用于在用户离开页面前弹窗提示用户相应内容。[the history docs](https://github.com/ReactTraining/history#blocking-transitions)
+
 // 其中，`go`,`goBack`,`goForward` 是对原生 `history.go` 的简单封装
 // 剩下的方法相对复杂些，因此在介绍 `push`, `replace` 等方法之前，先来了解下 `transitionManager`. 因为下面的很多实现，都用到了这个对象所提供的方法
 
@@ -186,6 +194,29 @@ const history = createBrowserHistory()
 //   );
 // };
 
+// 这篇文章快完成的时候，我才发现 `react-router` 仓库里是有 `history` 的介绍的
+// 此时我一脸茫然，内容虽然不多，却非常值得参考。这里做部分翻译和理解，当作对上文的补充
+// [原地址](https://raw.githubusercontent.com/ReactTraining/react-router/master/packages/react-router/docs/api/history.md)
+// *`history is mutable`*
+// 在原文档中，说明了 `history` 对象是可变的。因此建议在 `react-router` 中获取
+// [`location`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/location.md)
+// 时可以使用 [`Route`](https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Route.md)
+// 的 `props` 的方式来替代 `history.location` 的方式
+// 这样的方式会确保你的流程处于 React 的生命周期中。例如：
+// ```jsx
+// class Comp extends React.Component {
+//   componentWillReceiveProps(nextProps) {
+//     // 正确的打开方式
+//     const locationChanged = nextProps.location !== this.props.location
+
+//     // 错误的打开方式，因为 history 是可变的，所以这里总是不等的 // will *always* be false because history is mutable.
+//     const locationChanged = nextProps.history.location !== this.props.history.location
+//   }
+// }
+
+// <Route component={Comp}/>
+
+* 更多内容请查看[the history documentation](https://github.com/ReactTraining/history#properties).
 // 在使用方法之前，它首先用几个工具函数做了判断，判断该浏览器是否适用
 
 const App = () => (

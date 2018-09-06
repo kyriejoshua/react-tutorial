@@ -152,16 +152,22 @@ const data = [{
   end: "2018-08-30 20:51"
 }, {
   id: 25,
-  allDay: false,
   title: "Sports: 400  85+",
+  allDay: false,
   start: "2018-09-02 20:54",
   end: "2018-09-02 20:54",
 }, {
   id: 26,
-  allDay: false,
   title: "Sports: 360",
+  allDay: false,
   start: "2018-09-03 21:02",
   end: "2018-09-03 21:02"
+}, {
+  id: 27,
+  title: "Sports: 360",
+  allDay: false,
+  start: "2018-09-06 21:40",
+  end: "2018-09-06 21:40"
 }]
 
 export default data
