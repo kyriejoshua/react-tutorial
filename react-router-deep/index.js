@@ -216,7 +216,7 @@ const history = createBrowserHistory()
 
 // <Route component={Comp}/>
 
-* 更多内容请查看[the history documentation](https://github.com/ReactTraining/history#properties).
+// 更多内容请查看[the history documentation](https://github.com/ReactTraining/history#properties).
 // 在使用方法之前，它首先用几个工具函数做了判断，判断该浏览器是否适用
 
 const App = () => (
