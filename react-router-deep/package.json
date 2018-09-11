@@ -1,6 +1,6 @@
 {
   "name": "react-router-deep",
-  "version": "1.2.5",
+  "version": "1.3.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,7 @@
     "react-dom": "^16.4.2",
     "react-router": "^4.3.1",
     "style-loader": "^0.22.1",
+    "sweetalert": "^2.1.0",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0",
     "wired-elements": "^0.5.8"

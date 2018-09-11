@@ -62,3 +62,12 @@
   right: 20px;
   z-index: 11;
 }
+
+/* sweetalert 定制 */
+.swal-title {
+  margin-bottom: 20px;
+}
+
+.swal-overlay {
+  background-color: rgba(43, 165, 137, 0.25);
+}

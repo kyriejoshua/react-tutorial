@@ -2,12 +2,26 @@ import React, { PureComponent } from 'react'
 import { WiredButton } from 'wired-elements'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
-import { isUnique, getFormattedDate } from './util'
+import swal from 'sweetalert'
+import { isUnique, getFormattedDate, isRecentlyExercised } from './util'
 import data from './data'
+import * as CONSTANTS from './constants'
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import './home.css'
 
 BigCalendar.momentLocalizer(moment)
+
+const SWAL_PUNCH_WARNING = {
+  title: CONSTANTS.PUNCH_WARNING,
+  icon: 'warning',
+  button: false
+}
+
+const SWAL_PUNCH_SUCCESS = {
+  title: CONSTANTS.PUNCH_SUCCESS,
+  icon: 'success',
+  button: false
+}
 
 export default class Home extends PureComponent  {
   constructor(props) {
@@ -18,6 +32,10 @@ export default class Home extends PureComponent  {
     this.state = {
       events
     }
+  }
+
+  componentDidMount() {
+    !isRecentlyExercised(this.state.events) && swal(SWAL_PUNCH_WARNING)
   }
 
   addEvent = () => {
@@ -82,6 +100,7 @@ export default class Home extends PureComponent  {
       const title = e.target.value ? `Sports: ${e.target.value}` : ''
       this.pushEvent(title)
       this.closeCard()
+      swal(SWAL_PUNCH_SUCCESS)
     }
   }
 
