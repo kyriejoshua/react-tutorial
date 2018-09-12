@@ -1,9 +1,14 @@
 import React, { PureComponent } from 'react'
-import { WiredButton } from 'wired-elements'
+import { WiredButton, WiredListbox, WiredIconButton } from 'wired-elements'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 import swal from 'sweetalert'
-import { isUnique, getFormattedDate, isRecentlyExercised } from './util'
+import { isUnique,
+  getFormattedDate,
+  isRecentlyExercised,
+  getLastingMax,
+  getRecentlyLasting
+} from './util'
 import data from './data'
 import * as CONSTANTS from './constants'
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
@@ -23,6 +28,11 @@ const SWAL_PUNCH_SUCCESS = {
   button: false
 }
 
+const SWAL_PUNCH_INFO = {
+  icon: 'info',
+  button: false
+}
+
 export default class Home extends PureComponent  {
   constructor(props) {
     super(props)
@@ -35,7 +45,17 @@ export default class Home extends PureComponent  {
   }
 
   componentDidMount() {
-    !isRecentlyExercised(this.state.events) && swal(SWAL_PUNCH_WARNING)
+    const events = this.state.events
+    let Tip
+    if (isRecentlyExercised(events)) {
+      const lasting = getRecentlyLasting(events)
+      console.info(lasting)
+      Object.assign(SWAL_PUNCH_INFO, { title: `您当前连续打卡${lasting}天！继续努力！`})
+      Tip = SWAL_PUNCH_INFO
+    } else {
+      Tip = SWAL_PUNCH_WARNING
+    }
+    swal(Tip)
   }
 
   addEvent = () => {
@@ -104,17 +124,33 @@ export default class Home extends PureComponent  {
     }
   }
 
-  render() {
+  renderTip() {
+    const lasting = getLastingMax(this.state.events)
+    return (
+      <wired-listbox class='wired-tip'>
+        <wired-item value='one' text={`您最长连续打卡${lasting}天!`}></wired-item>
+      </wired-listbox>
+    )
+  }
+
+  renderCard() {
     const cardClass = this.state.showCard ? 'card card-show': 'card card-hidden'
     return (
-      <div className='calendar'>
-        <div className={cardClass}>
-          <div className='calendar-card'>
-            <textarea className='card-textarea'
-            onKeyDown={this.handleSubmit}
-            onBlur={this.closeCard}/>
-          </div>
+      <div className={cardClass}>
+        <div className='calendar-card'>
+          <textarea className='card-textarea'
+          onKeyDown={this.handleSubmit}
+          onBlur={this.closeCard}/>
         </div>
+      </div>
+    )
+  }
+
+  render() {
+    return (
+      <div className='calendar'>
+        {this.renderTip()}
+        {this.renderCard()}
         <wired-button class='clear-btn' onClick={this.clearAll}>
           clearAll
         </wired-button>
@@ -124,9 +160,9 @@ export default class Home extends PureComponent  {
           endAccessor='end'
           eventPropGetter={this.eventPropGetter}
         />
-        <wired-button class='push-btn' onClick={this.addEvent}>
-          push events
-        </wired-button>
+        <wired-icon-button class='push-btn red big' onClick={this.addEvent}>
+          favorite
+        </wired-icon-button>
       </div>
     )
   }

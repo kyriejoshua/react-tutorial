@@ -21,6 +21,10 @@ export function getFormattedDate(date = undefined) {
   return moment(date).format('YYYY-MM-DD HH:mm')
 }
 
+export function isSameDate(date1, date2, type = 'day') {
+  return date1.isSame(date2, type)
+}
+
 /**
  * [getToday 获取当天]
  * @return {[type]} [description]
@@ -45,6 +49,53 @@ export function getYesterday() {
 export function isRecentlyExercised(events = []) {
   if (!Array.isArray(events) || events.length === 0) { return }
   const lastDay = events[events.length - 1]
-  return lastDay && (getYesterday().isSame(lastDay.start, 'day') || getToday().isSame(lastDay.start, 'day'))
+  return lastDay && (isSameDate(getYesterday(), lastDay.start) || isSameDate(getToday(), lastDay.start))
 }
-// TODO 计算连续打卡时长
+
+/**
+ * [getLastingMax 计算曾经最长打卡时间]
+ * @param  {Array}  arr [description]
+ * @return {Number}     [description]
+ */
+export function getLastingMax(arr = []) {
+  const len = arr.length
+  if (len === 0 || len === 1) { return len }
+  let lasting = 1
+  let temp = 1
+  for (let index = 0; index < len; index++) {
+    const current = arr[index];
+    // 如果是第一个数，不做处理
+    if (!arr[index - 1] && arr[index - 1] !== 0) { continue }
+    // 如果正好是递增为 1 天
+    if (isSameDate(moment(current.start).add(-1, 'days'), moment(arr[index - 1].start))) {
+      temp++
+    } else {
+      lasting = temp > lasting ? temp : lasting
+      temp = 1
+    }
+    // 如果正好是末尾连续
+    if (index === (len - 1)) { lasting = temp > lasting ? temp : lasting }
+    // 如果计算连续已停止，并且当前已经持续的数量超过剩下的数量
+    if (lasting > (len - index - 1) && temp === 1) break;
+  }
+  return lasting
+}
+
+/**
+ * [getRecentlyLasting 获取当前连续打卡天数]
+ * @param  {Array}  arr [description]
+ * @return {Number}     [description]
+ */
+export function getRecentlyLasting(arr = []) {
+  const len = arr.length
+  let lasting = 1
+  for (let index = len - 1; index > 0; index--) {
+    const current = arr[index];
+    if (isSameDate(moment(current.start).add(-1, 'days'), moment(arr[index - 1].start))) {
+      lasting++
+    } else {
+      break
+    }
+  }
+  return lasting
+}
