@@ -13,4 +13,4 @@
 * **react-deep:** React 的一些底层原理解析。
 * **react-redux:** 学习 redux, 官方案例——TodoList 及 redux 部分源码解读。
 * **react-router:** v4+ 源码解读。顺便做了一个简单的在线打卡 app.node v8.6.0.
-  * [详情]('./react-router-deep')
+  * [详情](./react-router-deep)
