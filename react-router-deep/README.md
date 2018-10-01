@@ -12,6 +12,7 @@
 
 ### TODO
 * 由于无法同时监听 cmd + enter, 所以目前用 shift + enter 替代。
+* 缺少直接写入文件的支持。用 node 实现。
 
 ### Usage
 * Run `npm start`

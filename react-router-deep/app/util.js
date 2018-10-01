@@ -15,9 +15,11 @@ export function isUnique(a, b) {
 /**
  * [getFormattedDate 格式化日期]
  * @param  {Date} date [description]
+ * @param  {Boolean} isDate [是否只格式化日期]
  * @return {String}      [description]
  */
-export function getFormattedDate(date = undefined) {
+export function getFormattedDate(date = undefined, isDate) {
+  const format = isDate ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm'
   return moment(date).format('YYYY-MM-DD HH:mm')
 }
 
@@ -27,7 +29,7 @@ export function isSameDate(date1, date2, type = 'day') {
 
 /**
  * [getToday 获取当天]
- * @return {[type]} [description]
+ * @return {Date} [description]
  */
 export function getToday() {
   return moment()
@@ -35,7 +37,7 @@ export function getToday() {
 
 /**
  * [getYesterday 获取昨天]
- * @return {[type]} [description]
+ * @return {Date} [description]
  */
 export function getYesterday() {
   return getToday().add(-1, 'days')
@@ -101,17 +103,47 @@ export function getRecentlyLasting(arr = []) {
 }
 
 /**
- * [getExercised 获取每月的锻炼次数，以对象形式存储]
+ * [getExercisedSizes 获取当天的锻炼数量]
+ * @param  {String} str [description]
+ * @return {Number}     [description]
+ */
+export function getExercisedSizes(str = '') {
+  return parseFloat(str.substr(8, 4))
+}
+
+/**
+ * [getExercisedInfo 获取打卡相关的信息]
+ * @param  {Array}  arr [description]
+ * @return {Object}     [description]
+ */
+export function getExercisedInfo(arr = []) {
+  let info = {}
+  let times = arr.map((item) => {
+    return getExercisedSizes(item.title)
+  })
+  info.times = {
+    max: Math.max(...times)
+  }
+  let maxDay = arr.find((item) => {
+    return getExercisedSizes(item.title)
+  })
+  info.times.maxDay = getFormattedDate(maxDay.start, true)
+  info.monthly = getExercisedMonthly(arr)
+  return info
+}
+
+/**
+ * [getExercised 获取每月的锻炼次数，以对象形式存储，然后转化为数组]
  * @param  {Array}  arr [description]
  * @return {Array}     [description]
  */
 export function getExercisedMonthly(arr = []) {
-  let info = {}
+  let monthly = {}
   arr.map((item) => {
     let month = moment(item.start).month() + 1
-    info[month] = info[month] ? info[month] + 1 : 1
+    monthly[month] = monthly[month] ? monthly[month] + 1 : 1
   })
-  return transformObjToArray(info)
+  return transformObjToArray(monthly)
 }
 
 /**

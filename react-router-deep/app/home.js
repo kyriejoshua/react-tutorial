@@ -8,7 +8,7 @@ import { isUnique,
   isRecentlyExercised,
   getLastingMax,
   getRecentlyLasting,
-  getExercisedMonthly
+  getExercisedInfo
 } from './util'
 import data from './data'
 import * as CONSTANTS from './constants'
@@ -157,15 +157,18 @@ export default class Home extends PureComponent  {
     const LastingAllTip = `您目前已打卡 ${len} 次。`
     const lasting = getLastingMax(this.state.events)
     const LastingLongestTip = `其中，最长连续打卡 ${lasting} 次。`
-    const info = getExercisedMonthly(this.state.events)
+    const info = getExercisedInfo(this.state.events)
+    let { monthly = [], times = {} } = info
+    const LastingDay = `其中，最多的一天是 ${times.maxDay}, 做了 ${times.max} 下。`
     return (
       <wired-card class={`wired-card ${cardInfoClass}`} onClick={this.handleCard}>
         <h3>打卡统计面板:</h3>
         <h4>{LastingAllTip}</h4>
         <h4>{LastingLongestTip}</h4>
-        {info.map((item) => {
+        {monthly.map((item) => {
           return (<h4 key={item.key}>{`其中，${item.month} 月打卡 ${item.times} 次。`}</h4>)
         })}
+        <h4>{LastingDay}</h4>
       </wired-card>
     )
   }
