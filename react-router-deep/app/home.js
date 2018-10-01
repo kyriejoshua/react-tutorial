@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { WiredButton, WiredListbox, WiredIconButton } from 'wired-elements'
+import { WiredButton, WiredListbox, WiredIconButton, WiredCard } from 'wired-elements'
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 import swal from 'sweetalert'
@@ -7,7 +7,8 @@ import { isUnique,
   getFormattedDate,
   isRecentlyExercised,
   getLastingMax,
-  getRecentlyLasting
+  getRecentlyLasting,
+  getExercisedMonthly
 } from './util'
 import data from './data'
 import * as CONSTANTS from './constants'
@@ -115,6 +116,10 @@ export default class Home extends PureComponent  {
     this.setState({ showCard: false })
   }
 
+  handleCard = () => {
+    this.setState({ showInfo: !this.state.showInfo })
+  }
+
   handleSubmit = (e) => {
     if (e.keyCode === 13 && e.shiftKey) {
       const title = e.target.value ? `Sports: ${e.target.value}` : ''
@@ -134,7 +139,7 @@ export default class Home extends PureComponent  {
   }
 
   renderCard() {
-    const cardClass = this.state.showCard ? 'card card-show': 'card card-hidden'
+    const cardClass = this.state.showCard ? 'card show': 'card hidden'
     return (
       <div className={cardClass}>
         <div className='calendar-card'>
@@ -142,6 +147,38 @@ export default class Home extends PureComponent  {
           onKeyDown={this.handleSubmit}
           onBlur={this.closeCard}/>
         </div>
+      </div>
+    )
+  }
+
+  renderInfo() {
+    const cardInfoClass = this.state.showInfo ? 'show': 'hidden'
+    const len = Array.isArray(this.state.events) ? this.state.events.length : 0
+    const LastingAllTip = `您目前已打卡 ${len} 次。`
+    const lasting = getLastingMax(this.state.events)
+    const LastingLongestTip = `其中，最长连续打卡 ${lasting} 次。`
+    const info = getExercisedMonthly(this.state.events)
+    return (
+      <wired-card class={`wired-card ${cardInfoClass}`} onClick={this.handleCard}>
+        <h3>打卡统计面板:</h3>
+        <h4>{LastingAllTip}</h4>
+        <h4>{LastingLongestTip}</h4>
+        {info.map((item) => {
+          return (<h4 key={item.key}>{`其中，${item.month} 月打卡 ${item.times} 次。`}</h4>)
+        })}
+      </wired-card>
+    )
+  }
+
+  renderBtns() {
+    return (
+      <div className='btns'>
+        <wired-icon-button class='push-btn red big' onClick={this.addEvent}>
+          favorite
+        </wired-icon-button>
+        <wired-icon-button class='info-btn green big' onClick={this.handleCard}>
+          info
+        </wired-icon-button>
       </div>
     )
   }
@@ -160,9 +197,8 @@ export default class Home extends PureComponent  {
           endAccessor='end'
           eventPropGetter={this.eventPropGetter}
         />
-        <wired-icon-button class='push-btn red big' onClick={this.addEvent}>
-          favorite
-        </wired-icon-button>
+        {this.renderBtns()}
+        {this.renderInfo()}
       </div>
     )
   }

@@ -26,11 +26,11 @@
   z-index: 999;
 }
 
-.card-show {
+.show {
   display: block;
 }
 
-.card-hidden {
+.hidden {
   display: none;
 }
 
@@ -54,14 +54,27 @@
   z-index: 11;
 }
 
-.push-btn {
-  --wired-icon-size: 32px; /* wired-icon-button */
-  color:  red;
+.btns {
+  width: 150px;
   position: fixed;
   padding: 12px;
   bottom: 20px;
   right: 20px;
   z-index: 11;
+  display: flex;
+  justify-content: space-between;
+}
+
+.push-btn {
+  --wired-icon-size: 32px; /* wired-icon-button */
+  color: red;
+  padding: 12px;
+}
+
+.info-btn {
+  --wired-icon-size: 32px; /* wired-icon-button */
+  color: green;
+  padding: 12px;
 }
 
 .wired-tip {
@@ -74,9 +87,35 @@
   line-height: 30px;
 }
 
+.wired-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 10px;
+  width: 320px;
+  height: 200px;
+  min-height: 200px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.wired-card h3 {
+  padding-bottom: 15px;
+}
+
 /* 日历定制 */
 .rbc-toolbar {
   margin-bottom: 42px;
+}
+
+/* 解决滚动问题，明明有了 flex: 1 0 0; 了为啥还要 height: 100%。 */
+.rbc-month-view {
+  height: auto;
 }
 
 /* sweetalert 定制 */

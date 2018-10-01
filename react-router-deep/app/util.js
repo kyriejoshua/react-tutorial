@@ -99,3 +99,34 @@ export function getRecentlyLasting(arr = []) {
   }
   return lasting
 }
+
+/**
+ * [getExercised 获取每月的锻炼次数，以对象形式存储]
+ * @param  {Array}  arr [description]
+ * @return {Array}     [description]
+ */
+export function getExercisedMonthly(arr = []) {
+  let info = {}
+  arr.map((item) => {
+    let month = moment(item.start).month() + 1
+    info[month] = info[month] ? info[month] + 1 : 1
+  })
+  return transformObjToArray(info)
+}
+
+/**
+ * [transformObjToArray 将对象转化为数组格式，便于遍历]
+ * @param  {Object} obj [description]
+ * @return {Array}     [description]
+ */
+export function transformObjToArray(obj = {}) {
+  let info = []
+  for (let month in obj) {
+    info.push({
+      key: Math.random(),
+      month,
+      times: obj[month]
+    })
+  }
+  return info
+}

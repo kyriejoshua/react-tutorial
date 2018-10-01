@@ -12,7 +12,6 @@
 
 ### TODO
 * 由于无法同时监听 cmd + enter, 所以目前用 shift + enter 替代。
-* 算法计算连续打卡时长，在初次进入时以优雅的画面弹窗显示。
 
 ### Usage
 * Run `npm start`
