@@ -50,7 +50,6 @@ export default class Home extends PureComponent  {
     let Tip
     if (isRecentlyExercised(events)) {
       const lasting = getRecentlyLasting(events)
-      console.info(lasting)
       Object.assign(SWAL_PUNCH_INFO, { title: `您当前连续打卡 ${lasting} 天！继续努力！`})
       Tip = SWAL_PUNCH_INFO
     } else {
