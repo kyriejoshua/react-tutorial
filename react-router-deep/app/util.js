@@ -125,7 +125,7 @@ export function getExercisedInfo(arr = []) {
     max: Math.max(...times)
   }
   let maxDay = arr.find((item) => {
-    return getExercisedSizes(item.title)
+    return getExercisedSizes(item.title) === info.times.max
   })
   info.times.maxDay = getFormattedDate(maxDay.start, true)
   info.monthly = getExercisedMonthly(arr)
