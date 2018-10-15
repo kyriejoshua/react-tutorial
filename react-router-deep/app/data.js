@@ -242,7 +242,7 @@ const data = [{
   end: "2018-10-13 19:52"
 }, {
   id: 40,
-  allDay: false
+  allDay: false,
   title: "Sports: 320",
   start: "2018-10-15 21:04",
   end: "2018-10-15 21:04"
