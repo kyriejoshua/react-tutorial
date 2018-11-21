@@ -17,6 +17,7 @@ class ExampleA extends Component {
 
   // shouldComponentUpdate(nextProps, nextState) {
   // }
+
   componentWillUpdate(nextProps, nextState) {
     console.info('will update', nextProps, nextState)
     // this.setState({ count: 1 }) // 会不断进入该生命周期导致死循环
