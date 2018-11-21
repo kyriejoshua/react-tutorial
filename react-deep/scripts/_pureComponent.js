@@ -1,6 +1,22 @@
 import React, { Component, PureComponent } from 'react'
 import { WiredButton, WiredCard } from 'wired-elements'
 
+// 无状态组件，完全依赖于 props 的变化
+/**
+ * [1. 内部没有自己的状态
+ *  2. 渲染内容完全依赖于传入的 props
+ *  3. 没有生命周期，但可以通过高阶组件的形式来实现
+ *  4. 写法更简洁
+ *  5. 占内存更小
+ *  6. 可拓展性强，可组合使用，currying 使用]
+ * @param  {Object} props [description]
+ * @return {[type]}       [description]
+ */
+const StatelessComponent = (props) => {
+  console.info('stateless', props)
+  return (<h4>stateless: {props.clicked}</h4>)
+}
+
 export default class ExampleC extends PureComponent {
   constructor() {
     super()
@@ -53,6 +69,7 @@ export default class ExampleC extends PureComponent {
       <wired-card>
         <h3>PureComponent Example</h3>
         <h4>clicked: {this.state.clicked}</h4>
+        <StatelessComponent clicked={this.state.clicked} />
         <wired-button onClick={this.handleClick}>
           changing state
         </wired-button>
