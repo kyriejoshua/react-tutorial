@@ -1,6 +1,15 @@
 import React, { Component, PureComponent } from 'react'
 import { WiredButton, WiredCard } from 'wired-elements'
 
+// 打印看下两个组件的代码
+console.info('React', React)
+console.info('Component', Component.toString())
+console.info('PureComponent', PureComponent.toString())
+
+// Component = () => { } // bundle.js:13586 ./scripts/_pureComponent.js Module build failed: SyntaxError: "Component" is read - only
+// 报错，因为用 import 引入的 Component 是只读的
+// PureComponent.example = 'example'
+
 // 无状态组件，完全依赖于 props 的变化
 /**
  * [1. 内部没有自己的状态

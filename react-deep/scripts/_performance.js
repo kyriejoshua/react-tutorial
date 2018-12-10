@@ -30,3 +30,5 @@ this.handleChange = this.handleChange.bind(this)
 
 // 8. 复杂页面拆分成多个单个组件，方便 react diff 比对
 // 类似一棵树的所有节点的比较转化为单一节点的比较
+
+// 9. 按需加载
