@@ -14,6 +14,10 @@ const PureComponent = () => (
 
 // 2. shouldComponentUpdate 内部做判断, 比较 nextProps, nextState 和当前的变化
 // 避免后续的 diff 计算，componentWillUpdate, render 等等
+// shouldComponentUpdate 做性能优化的本质在于调用时机
+// 例如 props 或 state 可能会有变化，涉及对象的一层嵌套或仅仅是原始数据类型的变化，使用 PureComponent 是个较好的选择，自动浅拷贝比较
+// 如果 props 或 state 总是在变化，那么直接用原来的 Component 即可，避免进行多余的比较
+// 如果 props 或 state 可能会有变化，但不确定是否是深层嵌套的对象，immutablejs 的数据方案会更加合适
 
 // 3. 使用 const 来替代 let 声明变量
 

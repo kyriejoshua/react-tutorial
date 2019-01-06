@@ -35,6 +35,16 @@ export default class ExampleC extends PureComponent {
   }
 
   /**
+   * [componentWillMount v15.6.1 版本，当前生命周期只执行一次]
+   */
+  componentWillMount () {
+    console.warn('this', this)
+    this.setState({
+      clicked: 123123
+    })
+  }
+
+  /**
    * [随机确定是否更新数字，如果使用 Component 而不做任何修改,
    * 则不论 state 是否改变，每次都会 render
    * 使用 PureComponent 则会自动做一层浅比较，因此不会每次更新，当只有 state 真的改变时才会更新
