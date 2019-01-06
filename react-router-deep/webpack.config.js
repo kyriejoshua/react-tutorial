@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const routerPrefix = '/react-router'
 
 module.exports = {
+  mode: 'development',
   entry: './index.js',
   output: {
     filename: 'bundle.js',
@@ -48,6 +49,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
   },
+  devtool: "source-map",
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
