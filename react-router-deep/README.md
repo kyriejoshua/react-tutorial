@@ -19,11 +19,13 @@
 
 ### Other
 
-* 由于收到了 `github` 的安全警告。因此将 `webpack-dev-server` 升级至 **3.1.11**. 因为依赖关系， `webpack` 也不得不升至 **4.0.0**. 还添加了 `webpack-cli` 这个依赖。
+* 由于收到了 `github` 的安全警告，因此将 `webpack-dev-server` 升级至 **3.1.11**. 因为依赖关系， `webpack` 也不得不升至 **4.0.0**. 还添加了 `webpack-cli` 这个依赖。
 * 目前当前项目已升级，暂未发现问题。其他项目后续也会升级。
-* [地址](https://github.com/kyriejoshua/react-tutorial/network/alert/react-router-deep/package.json/webpack-dev-server/open)
-```javascript
-"dependencies": {
-  "webpack-dev-server": ">=3.1.11"
-}
-```
+* [原地址，升级后已不可见](https://github.com/kyriejoshua/react-tutorial/network/alert/react-router-deep/package.json/webpack-dev-server/open)
+* 处理方案：
+
+  ```javascript
+  "dependencies": {
+    "webpack-dev-server": ">=3.1.11"
+  }
+  ```
