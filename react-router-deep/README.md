@@ -1,7 +1,7 @@
 ## React Router Deep(打卡 app)
 
 ### Required
-* node v8.6.0
+* node v8.9.4 - webpack v4+ 必须
 * react v16.4.2
 * react-router v4.3.1
 
