@@ -45,13 +45,19 @@
   outline: none;
 }
 
-.clear-btn {
+.clear-btns {
   position: fixed;
   padding: 5px 15px;
   font-size: 16px;
   bottom: 20px;
   left: 20px;
   z-index: 11;
+}
+
+.clear-btn {
+  margin-right: 15px;
+  padding: 5px 15px;
+  font-size: 16px;
 }
 
 .btns {

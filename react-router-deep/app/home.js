@@ -4,11 +4,14 @@ import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 import swal from 'sweetalert'
 import { isUnique,
+  isSameDate,
+  getToday,
   getFormattedDate,
   isRecentlyExercised,
   getLastingMax,
   getRecentlyLasting,
-  getExercisedInfo
+  getExercisedInfo,
+  getCurrentEvents
 } from './util'
 import data from './data'
 import * as CONSTANTS from './constants'
@@ -34,6 +37,9 @@ const SWAL_PUNCH_INFO = {
   button: false
 }
 
+const CURRENTYEAR = new Date().getFullYear()
+const LASTYEAR = CURRENTYEAR - 1
+
 export default class Home extends PureComponent  {
   constructor(props) {
     super(props)
@@ -46,10 +52,11 @@ export default class Home extends PureComponent  {
   }
 
   componentDidMount() {
-    const events = this.state.events
+    const { events } = this.state
+    const currentEvents = getCurrentEvents(events)
     let Tip
-    if (isRecentlyExercised(events)) {
-      const lasting = getRecentlyLasting(events)
+    if (isRecentlyExercised(currentEvents)) {
+      const lasting = getRecentlyLasting(currentEvents)
       Object.assign(SWAL_PUNCH_INFO, { title: `您当前连续打卡 ${lasting} 天！继续努力！`})
       Tip = SWAL_PUNCH_INFO
     } else {
@@ -63,8 +70,10 @@ export default class Home extends PureComponent  {
   }
 
   pushEvent = (title = 'Sports') => {
-    const len = this.state.events.length
-    const events = this.state.events.slice(0)
+    const { events } = this.state
+    const currentEvents = getCurrentEvents(events, 'new')
+    const len = currentEvents.length
+    const newCurrentEvents = currentEvents.slice(0)
     const newEvents = {
       id: len,
       title,
@@ -72,17 +81,37 @@ export default class Home extends PureComponent  {
       start: getFormattedDate(),
       end: getFormattedDate()
     }
-    if (!isUnique(newEvents, events)) { return }
-    this.setState({
-      events: events.concat([newEvents])
-    }, () => {
+    if (!isUnique(newEvents, currentEvents)) { return }
+    events[CURRENTYEAR] = newCurrentEvents.concat([newEvents])
+    this.setState({ events }, () => {
       window.localStorage.setItem('sports', JSON.stringify(this.state.events))
     })
   }
 
+  /**
+   * [清除今日数据，仅在今日有数据时清除]
+   * @return {[type]} [description]
+   */
+  clearToday = () => {
+    const { events } = this.state
+    const currentEvents = getCurrentEvents(events, 'new')
+    const lastEvent = currentEvents[currentEvents.length - 1]
+    if (lastEvent && isSameDate(getToday(), lastEvent.start)) {
+      currentEvents.pop()
+      events[CURRENTYEAR] = currentEvents
+    }
+    this.setState({ events }, () => {
+      window.localStorage.setItem('sports', undefined)
+    })
+  }
+
+  /**
+   * [清除所有数据]
+   * @return {[type]} [description]
+   */
   clearAll = () => {
     this.setState({
-      events: []
+      events: {}
     }, () => {
       window.localStorage.setItem('sports', undefined)
     })
@@ -129,7 +158,8 @@ export default class Home extends PureComponent  {
   }
 
   renderTip() {
-    const lasting = getLastingMax(this.state.events)
+    const currentEvents = getCurrentEvents(this.state.events)
+    const lasting = getLastingMax(currentEvents)
     return (
       <wired-listbox class='wired-tip'>
         <wired-item value='one' text={`您最长连续打卡${lasting}天!`}></wired-item>
@@ -152,16 +182,17 @@ export default class Home extends PureComponent  {
 
   renderInfo() {
     const cardInfoClass = this.state.showInfo ? 'show': 'hidden'
-    const len = Array.isArray(this.state.events) ? this.state.events.length : 0
+    const currentEvents = getCurrentEvents(this.state.events)
+    const len = Array.isArray(currentEvents) ? currentEvents.length : 0
     const LastingAllTip = `您目前已打卡 ${len} 次。`
-    const lasting = getLastingMax(this.state.events)
+    const lasting = getLastingMax(currentEvents)
     const LastingLongestTip = `其中，最长连续打卡 ${lasting} 次。`
-    const info = getExercisedInfo(this.state.events)
+    const info = getExercisedInfo(currentEvents)
     let { monthly = [], times = {} } = info
     const LastingDay = `其中，最多的一天是 ${times.maxDay}, 做了 ${times.max} 下。`
     return (
       <wired-card class={`wired-card ${cardInfoClass}`} onClick={this.handleCard}>
-        <h3>打卡统计面板:</h3>
+        <h3>{this.state.events[CURRENTYEAR] ? CURRENTYEAR : LASTYEAR} 打卡统计面板:</h3>
         <h4>{LastingAllTip}</h4>
         <h4>{LastingLongestTip}</h4>
         {monthly.map((item) => {
@@ -185,20 +216,36 @@ export default class Home extends PureComponent  {
     )
   }
 
+  renderClear() {
+    return (
+      <div className="clear-btns">
+        <wired-button class='clear-btn' onClick={this.clearToday}>
+          clearToday
+        </wired-button>
+        <wired-button class='clear-btn' onClick={this.clearAll}>
+          clearAll
+        </wired-button>
+      </div>
+    )
+  }
+
+  renderCalendar() {
+    const currentEvents = getCurrentEvents(this.state.events)
+    return <BigCalendar
+          events={currentEvents}
+          startAccessor='start'
+          endAccessor='end'
+          eventPropGetter={this.eventPropGetter}
+        />
+  }
+
   render() {
     return (
       <div className='calendar'>
         {this.renderTip()}
         {this.renderCard()}
-        <wired-button class='clear-btn' onClick={this.clearAll}>
-          clearAll
-        </wired-button>
-        <BigCalendar
-          events={this.state.events}
-          startAccessor='start'
-          endAccessor='end'
-          eventPropGetter={this.eventPropGetter}
-        />
+        {this.renderClear()}
+        {this.renderCalendar()}
         {this.renderBtns()}
         {this.renderInfo()}
       </div>

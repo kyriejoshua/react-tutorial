@@ -1,5 +1,8 @@
 import moment from 'moment'
 
+const CURRENTYEAR = new Date().getFullYear()
+const LASTYEAR = CURRENTYEAR - 1
+
 /**
  * [isUnique 判断是否已打卡过]
  * @param  {Object}  a [description]
@@ -161,4 +164,8 @@ export function transformObjToArray(obj = {}) {
     })
   }
   return info
+}
+
+export function getCurrentEvents(events, type) {
+  return type === 'new' ? (events[CURRENTYEAR] || []) : (events[CURRENTYEAR] || events[LASTYEAR])
 }
