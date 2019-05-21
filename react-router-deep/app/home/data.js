@@ -247,5 +247,12 @@ export default {
       title: "Sports: 320",
       start: "2018-10-15 21:04",
       end: "2018-10-15 21:04"
+    }],
+  2019: [{
+      "id": 0,
+      "title": "Sports: 180 30",
+      "allDay": false,
+      "start": "2019-05-21 22:04",
+      "end": "2019-05-21 22:04"
     }]
 }

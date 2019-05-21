@@ -35,7 +35,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'app/'),
+      '@': path.resolve(__dirname, 'app/'), // https://webpack.js.org/configuration/resolve/
     },
     extensions: ['.js', 'jsx', '.css', '.json']
   },
