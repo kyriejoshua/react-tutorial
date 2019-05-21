@@ -1,4 +1,4 @@
-import { getFormattedDate } from './../util'
+import { getFormattedDate } from '@/util'
 
 export default {
   2018: [{

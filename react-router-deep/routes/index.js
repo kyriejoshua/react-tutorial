@@ -1,8 +1,8 @@
 import React from 'react'
 import { Router, Route } from 'react-router'
 import { WiredCard } from 'wired-elements'
-import Home from './../app/home'
-import Menu from './../app/menu'
+import Home from '@/home'
+import Menu from '@/menu'
 
 const prefix = process.env.prefix
 // TODO prefix 前缀用法需要特殊处理

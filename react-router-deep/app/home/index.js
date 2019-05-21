@@ -13,7 +13,7 @@ import { isUnique,
   getExercisedInfo,
   getCurrentEvents,
   copyToClipboard
-} from './../util'
+} from '@/util'
 import data from './data'
 import * as CONSTANTS from './constants'
 
