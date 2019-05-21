@@ -34,6 +34,10 @@
   display: none;
 }
 
+.info-active {
+  color: #FF370C;
+}
+
 .card-textarea {
   width:  100%;
   height: 100%;

@@ -193,23 +193,20 @@ export default class Home extends PureComponent  {
     const cardInfoClass = this.state.showInfo ? 'show': 'hidden'
     const currentEvents = getCurrentEvents(this.state.events)
     const len = Array.isArray(currentEvents) ? currentEvents.length : 0
-    const LastingAllTip = `您目前已打卡 ${len} 次。`
     const lasting = getLastingMax(currentEvents)
-    const LastingLongestTip = `其中，最长连续打卡 ${lasting} 次。`
     const info = getExercisedInfo(currentEvents)
     const UNEXISTED_STRING = '不存在的'
-    let { monthly = [], times = {} } = info
-    const LastingDay = `其中，最多的一天是 ${times.maxDay || UNEXISTED_STRING}, 做了 ${times.max || UNEXISTED_STRING} 下。`
+    const { monthly = [], times = {} } = info
 
     return (
       <wired-card class={`wired-card ${cardInfoClass}`} onClick={this.handleCard}>
         <h3>{this.state.events[CURRENTYEAR] ? CURRENTYEAR : LASTYEAR} 打卡统计面板:</h3>
-        <h4>{LastingAllTip}</h4>
-        <h4>{LastingLongestTip}</h4>
+        <h4>您目前已打卡{redText(len)}次。</h4>
+        <h4>其中，最长连续打卡{redText(lasting)}次。</h4>
         {monthly.map((item) => {
-          return (<h4 key={item.key}>{`其中，${item.month} 月打卡 ${item.times} 次。`}</h4>)
+          return (<h4 key={item.key}>其中，{redText(item.month)}月打卡{redText(item.times)}次。</h4>)
         })}
-        <h4>{LastingDay}</h4>
+        <h4>其中，最多的一天是{redText(times.maxDay || UNEXISTED_STRING)}, 做了{redText(times.max || UNEXISTED_STRING)}次。</h4>
       </wired-card>
     )
   }
@@ -265,3 +262,7 @@ export default class Home extends PureComponent  {
     )
   }
 }
+
+const redText = (text) => (
+  <span className="info-active"> {text} </span>
+)
