@@ -13,12 +13,12 @@ import { isUnique,
   getExercisedInfo,
   getCurrentEvents,
   copyToClipboard
-} from './util'
+} from './../util'
 import data from './data'
 import * as CONSTANTS from './constants'
 
-import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
-import './home.css'
+import '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
+import './index.css'
 
 BigCalendar.momentLocalizer(moment)
 
