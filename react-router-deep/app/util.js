@@ -121,16 +121,18 @@ export function getExercisedSizes(str = '') {
  */
 export function getExercisedInfo(arr = []) {
   let info = {}
-  let times = arr.map((item) => {
+  const times = arr.map((item) => {
     return getExercisedSizes(item.title)
   })
+
   info.times = {
-    max: Math.max(...times)
+    max: times.length === 0 ? 0 : Math.max(...times)
   }
-  let maxDay = arr.find((item) => {
+  const maxDay = arr.find((item) => {
     return getExercisedSizes(item.title) === info.times.max
   })
-  info.times.maxDay = getFormattedDate(maxDay.start, true)
+
+  info.times.maxDay = maxDay ? getFormattedDate(maxDay.start, true) : undefined
   info.monthly = getExercisedMonthly(arr)
   return info
 }
@@ -166,6 +168,39 @@ export function transformObjToArray(obj = {}) {
   return info
 }
 
+/**
+ * 获取当前年份或次年的数据
+ * @param {*} events
+ * @param {*} type
+ */
 export function getCurrentEvents(events, type) {
   return type === 'new' ? (events[CURRENTYEAR] || []) : (events[CURRENTYEAR] || events[LASTYEAR])
+}
+
+export function copyToClipboard(str = '') {
+  if (!str) { return }
+  if (typeof str !== 'string') {
+    str = JSON.stringify(str)
+  }
+  return createInput(str)
+}
+
+export function copyEvent() {
+  try {
+    document.execCommand('copy')
+  } catch (error) {
+    console.error('复制失败: ', error)
+    return false
+  }
+  return true
+}
+
+export function createInput(str = '') {
+  const input = document.createElement('input')
+  input.value = str
+  document.body.appendChild(input)
+  input.select()
+  const isCopied = copyEvent()
+  document.body.removeChild(input);
+  return isCopied
 }

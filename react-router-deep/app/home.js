@@ -11,10 +11,12 @@ import { isUnique,
   getLastingMax,
   getRecentlyLasting,
   getExercisedInfo,
-  getCurrentEvents
+  getCurrentEvents,
+  copyToClipboard
 } from './util'
 import data from './data'
 import * as CONSTANTS from './constants'
+
 import '../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 import './home.css'
 
@@ -81,11 +83,15 @@ export default class Home extends PureComponent  {
       start: getFormattedDate(),
       end: getFormattedDate()
     }
+
     if (!isUnique(newEvents, currentEvents)) { return }
     events[CURRENTYEAR] = newCurrentEvents.concat([newEvents])
+
     this.setState({ events }, () => {
-      window.localStorage.setItem('sports', JSON.stringify(this.state.events))
+      window.localStorage.setItem('sports', JSON.stringify(events))
     })
+
+    return copyToClipboard(newEvents)
   }
 
   /**
@@ -93,15 +99,18 @@ export default class Home extends PureComponent  {
    * @return {[type]} [description]
    */
   clearToday = () => {
-    const { events } = this.state
-    const currentEvents = getCurrentEvents(events, 'new')
+    const { events = {} } = this.state
+    // 必须深拷贝，否则无法更新
+    const newEvents = JSON.parse((JSON.stringify(events)))
+    const currentEvents = getCurrentEvents(newEvents, 'new')
     const lastEvent = currentEvents[currentEvents.length - 1]
+
     if (lastEvent && isSameDate(getToday(), lastEvent.start)) {
       currentEvents.pop()
-      events[CURRENTYEAR] = currentEvents
+      newEvents[CURRENTYEAR] = currentEvents
     }
-    this.setState({ events }, () => {
-      window.localStorage.setItem('sports', undefined)
+    this.setState({ events: newEvents }, () => {
+      window.localStorage.setItem('sports', JSON.stringify(newEvents))
     })
   }
 
@@ -151,9 +160,9 @@ export default class Home extends PureComponent  {
   handleSubmit = (e) => {
     if (e.keyCode === 13 && e.shiftKey) {
       const title = e.target.value ? `Sports: ${e.target.value}` : ''
-      this.pushEvent(title)
+      const tips = this.pushEvent(title) ? { text: CONSTANTS.COPIED_SUCCESS } : {}
       this.closeCard()
-      swal(SWAL_PUNCH_SUCCESS)
+      swal(Object.assign(SWAL_PUNCH_SUCCESS, tips))
     }
   }
 
@@ -172,7 +181,7 @@ export default class Home extends PureComponent  {
     return (
       <div className={cardClass}>
         <div className='calendar-card'>
-          <textarea className='card-textarea'
+          <textarea className='card-textarea' autoFocus
           onKeyDown={this.handleSubmit}
           onBlur={this.closeCard}/>
         </div>
@@ -188,8 +197,10 @@ export default class Home extends PureComponent  {
     const lasting = getLastingMax(currentEvents)
     const LastingLongestTip = `其中，最长连续打卡 ${lasting} 次。`
     const info = getExercisedInfo(currentEvents)
+    const UNEXISTED_STRING = '不存在的'
     let { monthly = [], times = {} } = info
-    const LastingDay = `其中，最多的一天是 ${times.maxDay}, 做了 ${times.max} 下。`
+    const LastingDay = `其中，最多的一天是 ${times.maxDay || UNEXISTED_STRING}, 做了 ${times.max || UNEXISTED_STRING} 下。`
+
     return (
       <wired-card class={`wired-card ${cardInfoClass}`} onClick={this.handleCard}>
         <h3>{this.state.events[CURRENTYEAR] ? CURRENTYEAR : LASTYEAR} 打卡统计面板:</h3>
@@ -230,7 +241,9 @@ export default class Home extends PureComponent  {
   }
 
   renderCalendar() {
-    const currentEvents = getCurrentEvents(this.state.events)
+    const { events } = this.state
+    const currentEvents = getCurrentEvents(events)
+
     return <BigCalendar
           events={currentEvents}
           startAccessor='start'

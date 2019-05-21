@@ -1,6 +1,6 @@
 import { getFormattedDate } from './util'
 
-const data = {
+export default {
   2018: [{
     id: 0,
     title: 'Sports: 150',
@@ -249,5 +249,3 @@ const data = {
       end: "2018-10-15 21:04"
     }]
 }
-
-export default data
