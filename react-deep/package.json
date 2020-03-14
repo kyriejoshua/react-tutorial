@@ -24,7 +24,7 @@
     "react-dom": "^15.6.1",
     "style-loader": "^0.18.2",
     "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.0",
+    "webpack-dev-server": "^3.10.3",
     "wired-elements": "^0.7.2"
   }
 }
